@@ -1,0 +1,23 @@
+# Local operating system files
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# Editor and temporary files
+.idea/
+*.swp
+*.swo
+*.log
+.agents/
+.aws/
+.codex/
+
+# Generated packages and build output
+*.zip
+*.crx
+*.pem
+dist/
+build/
+
+# Dependencies, if added later
+node_modules/

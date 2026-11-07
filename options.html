@@ -1,0 +1,15 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><link rel="stylesheet" href="ui.css"><title>Your profile · Formfill Teletalk</title></head>
+<body class="options-page"><main class="shell">
+  <header class="page-header"><div class="brand large"><span class="brand-mark">ফ</span><div><strong>Formfill Teletalk</strong><small>One profile for your application forms</small></div></div><div class="header-actions"><button id="previewToggle" class="button secondary">Autofill: Off</button><button id="saveTop" class="button primary">Save profile</button></div></header>
+  <section class="welcome hidden" id="welcome"><div class="welcome-icon">✦</div><div><h2>Let’s set up your profile</h2><p>Add your details once. When autofill is on, Formfill Teletalk can offer matching information on application forms.</p></div></section>
+  <section class="privacy-banner"><span>🔒</span><div><strong>Your profile stays on this device</strong><p>You control autofill with the switch. When it’s off, pages are not scanned.</p></div><label class="switch"><input id="mainToggle" type="checkbox" aria-label="Turn autofill on or off"><span class="slider"></span></label></section>
+  <div id="saveMessage" class="save-message" role="status"></div>
+  <form id="profileForm" autocomplete="on">
+    <section class="card"><div class="section-heading"><div class="section-icon">👤</div><div><h2>Basic information</h2><p>Names can be entered in English or বাংলা.</p></div></div><div class="form-grid" id="personalFields"></div></section>
+    <section class="card"><div class="section-heading"><div class="section-icon">📍</div><div><h2>Addresses</h2><p>Present and permanent address details.</p></div></div><label class="check-row"><input id="sameAddress" type="checkbox"> Permanent address is the same as present address</label><div class="two-columns"><div><h3>Present address</h3><div class="form-grid one-col" id="presentFields"></div></div><div id="permanentWrap"><h3>Permanent address</h3><div class="form-grid one-col" id="permanentFields"></div></div></div></section>
+    <section class="card"><div class="section-heading"><div class="section-icon">🎓</div><div><h2>Education</h2><p>Add the results that apply to you.</p></div></div><div id="educationFields"></div></section>
+    <section class="card"><div class="section-heading"><div class="section-icon">💼</div><div><h2>Job experience</h2><p>Add one or more previous or current roles.</p></div></div><div id="experienceList"></div><button type="button" id="addExperience" class="button secondary">＋ Add experience</button></section>
+    <div class="bottom-actions"><span>Your changes are saved only when you choose Save.</span><button type="submit" class="button primary">Save profile</button></div>
+  </form>
+</main><script src="options.js"></script></body></html>
