@@ -1,15 +1,250 @@
 <!doctype html>
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><link rel="stylesheet" href="ui.css"><title>Your profile · Formfill Teletalk</title></head>
-<body class="options-page"><main class="shell">
-  <header class="page-header"><div class="brand large"><span class="brand-mark">ফ</span><div><strong>Formfill Teletalk</strong><small>One profile for your application forms</small></div></div><div class="header-actions"><button id="previewToggle" class="button secondary">Autofill: Off</button><button id="saveTop" class="button primary">Save profile</button></div></header>
-  <section class="welcome hidden" id="welcome"><div class="welcome-icon">✦</div><div><h2>Let’s set up your profile</h2><p>Add your details once. When autofill is on, Formfill Teletalk can offer matching information on application forms.</p></div></section>
-  <section class="privacy-banner"><span>🔒</span><div><strong>Your profile stays on this device</strong><p>You control autofill with the switch. When it’s off, pages are not scanned.</p></div><label class="switch"><input id="mainToggle" type="checkbox" aria-label="Turn autofill on or off"><span class="slider"></span></label></section>
-  <div id="saveMessage" class="save-message" role="status"></div>
-  <form id="profileForm" autocomplete="on">
-    <section class="card"><div class="section-heading"><div class="section-icon">👤</div><div><h2>Basic information</h2><p>Names can be entered in English or বাংলা.</p></div></div><div class="form-grid" id="personalFields"></div></section>
-    <section class="card"><div class="section-heading"><div class="section-icon">📍</div><div><h2>Addresses</h2><p>Present and permanent address details.</p></div></div><label class="check-row"><input id="sameAddress" type="checkbox"> Permanent address is the same as present address</label><div class="two-columns"><div><h3>Present address</h3><div class="form-grid one-col" id="presentFields"></div></div><div id="permanentWrap"><h3>Permanent address</h3><div class="form-grid one-col" id="permanentFields"></div></div></div></section>
-    <section class="card"><div class="section-heading"><div class="section-icon">🎓</div><div><h2>Education</h2><p>Add the results that apply to you.</p></div></div><div id="educationFields"></div></section>
-    <section class="card"><div class="section-heading"><div class="section-icon">💼</div><div><h2>Job experience</h2><p>Add one or more previous or current roles.</p></div></div><div id="experienceList"></div><button type="button" id="addExperience" class="button secondary">＋ Add experience</button></section>
-    <div class="bottom-actions"><span>Your changes are saved only when you choose Save.</span><button type="submit" class="button primary">Save profile</button></div>
-  </form>
-</main><script src="options.js"></script></body></html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <link rel="stylesheet" href="ui.css">
+  <title>Profiles &amp; Settings · Formfill Teletalk</title>
+</head>
+<body class="options-page">
+  <main class="shell">
+    <header class="page-header">
+      <div class="brand large">
+        <span class="brand-mark">ফ</span>
+        <div>
+          <strong>Formfill Teletalk</strong>
+          <small>Manage multiple people for your application forms</small>
+        </div>
+      </div>
+      <div class="header-actions">
+        <button id="previewToggle" class="button secondary">Autofill: Off</button>
+        <button id="saveTop" class="button primary">Save profile</button>
+      </div>
+    </header>
+
+    <!-- Person / Profile Switcher -->
+    <section class="profile-mgmt-card">
+      <div class="profile-mgmt-top">
+        <div class="profile-picker-wrap">
+          <label for="profilePicker">Current Person:</label>
+          <select id="profilePicker" class="profile-picker-select" aria-label="Select person profile to edit"></select>
+        </div>
+        <div class="profile-buttons">
+          <button type="button" id="addPersonBtn" class="button secondary sm">＋ New Person</button>
+          <button type="button" id="renamePersonBtn" class="button secondary sm">✏ Rename</button>
+          <button type="button" id="duplicatePersonBtn" class="button secondary sm">⎘ Duplicate</button>
+          <button type="button" id="deletePersonBtn" class="button danger-outline sm">🗑 Delete</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="welcome hidden" id="welcome">
+      <div class="welcome-icon">✦</div>
+      <div>
+        <h2>Welcome to Formfill Teletalk</h2>
+        <p>You can create profiles for multiple people, upload each person’s photo and signature, and seamlessly autofill Teletalk application forms.</p>
+      </div>
+    </section>
+
+    <section class="privacy-banner">
+      <span>🔒</span>
+      <div>
+        <strong>All profiles and media stay strictly private on this device</strong>
+        <p>Autofill only scans forms when toggled on. Your information never leaves your browser.</p>
+      </div>
+      <label class="switch">
+        <input id="mainToggle" type="checkbox" aria-label="Turn autofill on or off">
+        <span class="slider"></span>
+      </label>
+    </section>
+
+    <div id="saveMessage" class="save-message" role="status"></div>
+
+    <form id="profileForm" autocomplete="on">
+      <!-- Photo and Signature Card -->
+      <section class="card">
+        <div class="section-heading">
+          <div class="section-icon">📷</div>
+          <div>
+            <h2>Photo &amp; Signature Upload</h2>
+            <p>Upload the applicant’s picture and signature to automatically attach them to job forms.</p>
+          </div>
+        </div>
+
+        <div class="media-upload-grid">
+          <!-- Photo Box -->
+          <div class="media-box" id="photoBox">
+            <input type="file" id="photoInput" accept="image/jpeg,image/png,image/jpg" style="display:none">
+            <div class="media-preview-container" id="photoPreviewWrap">
+              <div class="media-placeholder" id="photoPlaceholder">
+                <span>👤</span>
+                <div>No photo uploaded</div>
+              </div>
+              <img id="photoPreview" class="media-preview-img hidden" alt="Applicant Photo Preview">
+            </div>
+            <div class="media-meta hidden" id="photoMeta"></div>
+            <div class="media-btn-row">
+              <button type="button" id="uploadPhotoBtn" class="button secondary sm">📁 Choose Photo</button>
+              <button type="button" id="resizePhotoBtn" class="button secondary sm hidden">✂ Resize to 300×300</button>
+              <button type="button" id="removePhotoBtn" class="button danger-outline sm hidden">Remove</button>
+            </div>
+            <p class="media-hint">Teletalk standard: 300 × 300 px, max 100 KB, JPG/PNG.</p>
+          </div>
+
+          <!-- Signature Box -->
+          <div class="media-box" id="sigBox">
+            <input type="file" id="sigInput" accept="image/jpeg,image/png,image/jpg" style="display:none">
+            <div class="media-preview-container" id="sigPreviewWrap">
+              <div class="media-placeholder" id="sigPlaceholder">
+                <span>✍️</span>
+                <div>No signature uploaded</div>
+              </div>
+              <img id="sigPreview" class="media-preview-img hidden" alt="Applicant Signature Preview">
+            </div>
+            <div class="media-meta hidden" id="sigMeta"></div>
+            <div class="media-btn-row">
+              <button type="button" id="uploadSigBtn" class="button secondary sm">📁 Choose Signature</button>
+              <button type="button" id="resizeSigBtn" class="button secondary sm hidden">✂ Resize to 300×80</button>
+              <button type="button" id="removeSigBtn" class="button danger-outline sm hidden">Remove</button>
+            </div>
+            <p class="media-hint">Teletalk standard: 300 × 80 px, max 60 KB, JPG/PNG.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Basic Information Card -->
+      <section class="card">
+        <div class="section-heading">
+          <div class="section-icon">👤</div>
+          <div>
+            <h2>Basic Information</h2>
+            <p>Names can be entered in English and বাংলা.</p>
+          </div>
+        </div>
+        <div class="form-grid" id="personalFields"></div>
+      </section>
+
+      <!-- Addresses Card -->
+      <section class="card">
+        <div class="section-heading">
+          <div class="section-icon">📍</div>
+          <div>
+            <h2>Addresses</h2>
+            <p>Present and permanent address details.</p>
+          </div>
+        </div>
+        <label class="check-row">
+          <input id="sameAddress" type="checkbox"> Permanent address is the same as present address
+        </label>
+        <div class="two-columns">
+          <div>
+            <h3>Present address</h3>
+            <div class="form-grid one-col" id="presentFields"></div>
+          </div>
+          <div id="permanentWrap">
+            <h3>Permanent address</h3>
+            <div class="form-grid one-col" id="permanentFields"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Education Card -->
+      <section class="card">
+        <div class="section-heading">
+          <div class="section-icon">🎓</div>
+          <div>
+            <h2>Education</h2>
+            <p>Add the results that apply to this applicant.</p>
+          </div>
+        </div>
+        <div id="educationFields"></div>
+      </section>
+
+      <!-- Job Experience Card -->
+      <section class="card">
+        <div class="section-heading">
+          <div class="section-icon">💼</div>
+          <div>
+            <h2>Job Experience</h2>
+            <p>Add one or more previous or current roles.</p>
+          </div>
+        </div>
+        <div id="experienceList"></div>
+        <button type="button" id="addExperience" class="button secondary">＋ Add experience</button>
+      </section>
+
+      <datalist id="bdDistrictsList">
+        <option value="Bagerhat">
+        <option value="Bandarban">
+        <option value="Barguna">
+        <option value="Barishal">
+        <option value="Bhola">
+        <option value="Bogura">
+        <option value="Brahmanbaria">
+        <option value="Chandpur">
+        <option value="Chattogram">
+        <option value="Chuadanga">
+        <option value="Cox's Bazar">
+        <option value="Cumilla">
+        <option value="Dhaka">
+        <option value="Dinajpur">
+        <option value="Faridpur">
+        <option value="Feni">
+        <option value="Gaibandha">
+        <option value="Gazipur">
+        <option value="Gopalganj">
+        <option value="Habiganj">
+        <option value="Jamalpur">
+        <option value="Jashore">
+        <option value="Jhalokati">
+        <option value="Jhenaidah">
+        <option value="Joypurhat">
+        <option value="Khagrachhari">
+        <option value="Khulna">
+        <option value="Kishoreganj">
+        <option value="Kurigram">
+        <option value="Kushtia">
+        <option value="Lakshmipur">
+        <option value="Lalmonirhat">
+        <option value="Madaripur">
+        <option value="Magura">
+        <option value="Manikganj">
+        <option value="Meherpur">
+        <option value="Moulvibazar">
+        <option value="Munshiganj">
+        <option value="Mymensingh">
+        <option value="Naogaon">
+        <option value="Narail">
+        <option value="Narayanganj">
+        <option value="Narsingdi">
+        <option value="Natore">
+        <option value="Netrokona">
+        <option value="Nilphamari">
+        <option value="Noakhali">
+        <option value="Pabna">
+        <option value="Panchagarh">
+        <option value="Patuakhali">
+        <option value="Pirojpur">
+        <option value="Rajbari">
+        <option value="Rajshahi">
+        <option value="Rangamati">
+        <option value="Rangpur">
+        <option value="Satkhira">
+        <option value="Shariatpur">
+        <option value="Sherpur">
+        <option value="Sirajganj">
+        <option value="Sunamganj">
+        <option value="Sylhet">
+        <option value="Tangail">
+        <option value="Thakurgaon">
+      </datalist>
+
+      <div class="bottom-actions">
+        <span>Your changes are saved to the current person when you choose Save.</span>
+        <button type="submit" class="button primary">Save profile</button>
+      </div>
+    </form>
+  </main>
+  <script src="options.js"></script>
+</body>
+</html>

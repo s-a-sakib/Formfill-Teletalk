@@ -1,9 +1,9 @@
 {
   "manifest_version": 3,
   "name": "Formfill Teletalk",
-  "version": "1.0.0",
-  "description": "A private profile assistant for filling Teletalk application forms in Bangla and English.",
-  "permissions": ["storage", "scripting", "activeTab"],
+  "version": "1.1.0",
+  "description": "Multi-person private profile assistant for filling Teletalk application forms in Bangla and English with photo/signature upload and in-field auto-suggestions.",
+  "permissions": ["storage", "scripting", "activeTab", "unlimitedStorage"],
   "optional_host_permissions": ["<all_urls>"],
   "background": { "service_worker": "background.js" },
   "action": {

@@ -1,9 +1,47 @@
 <!doctype html>
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><link rel="stylesheet" href="ui.css"><title>Formfill Teletalk</title></head>
-<body class="popup"><main class="popup-card">
-  <header class="brand"><span class="brand-mark">ফ</span><div><strong>Formfill Teletalk</strong><small>Your form, filled simply</small></div><button id="settings" class="icon-button" aria-label="Open profile settings" title="Profile settings">⚙</button></header>
-  <section class="toggle-panel"><div><strong id="statusTitle">Autofill is off</strong><p id="statusText">Turn it on when you want help with a form.</p></div><label class="switch"><input id="toggle" type="checkbox" aria-label="Turn autofill on or off"><span class="slider"></span></label></section>
-  <p id="permissionNote" class="note hidden">To scan forms, allow access to the sites where you want to use autofill.</p>
-  <button id="editProfile" class="button secondary full">Edit my profile</button>
-  <footer>Profile details stay in this browser.</footer>
-</main><script src="popup.js"></script></body></html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <link rel="stylesheet" href="ui.css">
+  <title>Formfill Teletalk</title>
+</head>
+<body class="popup">
+  <main class="popup-card">
+    <header class="brand">
+      <span class="brand-mark">ফ</span>
+      <div>
+        <strong>Formfill Teletalk</strong>
+        <small>Multi-person form assistant</small>
+      </div>
+      <button id="settings" class="icon-button" aria-label="Open profile settings" title="Profile settings">⚙</button>
+    </header>
+
+    <section class="person-picker-card">
+      <div class="person-picker-header">
+        <span>Active Person to Fill</span>
+        <button id="addPersonQuick" class="icon-button" style="padding:0;font-size:15px;margin-left:0;" title="Add new person">＋ New</button>
+      </div>
+      <select id="popupProfileSelect" class="person-select" aria-label="Select person to fill"></select>
+    </section>
+
+    <section class="toggle-panel">
+      <div>
+        <strong id="statusTitle">Autofill is off</strong>
+        <p id="statusText">Turn it on when you want help with a form.</p>
+      </div>
+      <label class="switch">
+        <input id="toggle" type="checkbox" aria-label="Turn autofill on or off">
+        <span class="slider"></span>
+      </label>
+    </section>
+
+    <p id="permissionNote" class="note hidden">To scan forms, allow access to the sites where you want to use autofill.</p>
+
+    <button id="editProfile" class="button secondary full">Edit person details</button>
+
+    <footer>Details and media stay private on this device.</footer>
+  </main>
+  <script src="popup.js"></script>
+</body>
+</html>
