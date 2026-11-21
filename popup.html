@@ -14,34 +14,70 @@
         <strong>Formfill Teletalk</strong>
         <small>Multi-person form assistant</small>
       </div>
-      <button id="settings" class="icon-button" aria-label="Open profile settings" title="Profile settings">⚙</button>
+      <div style="margin-left: auto; display: flex; gap: 4px; align-items: center;">
+        <button id="lockNowBtn" class="icon-button hidden" aria-label="Lock Vault" title="Lock Vault Now">🔒</button>
+        <button id="settings" class="icon-button" aria-label="Open profile settings" title="Profile settings">⚙</button>
+      </div>
     </header>
 
-    <section class="person-picker-card">
-      <div class="person-picker-header">
-        <span>Active Person to Fill</span>
-        <button id="addPersonQuick" class="icon-button" style="padding:0;font-size:15px;margin-left:0;" title="Add new person">＋ New</button>
+    <!-- Vault Banner / Status -->
+    <div id="vaultBanner" class="vault-banner hidden">
+      <div class="vault-banner-left">
+        <span id="vaultStatusIcon">🔒</span>
+        <span id="vaultStatusText">Vault Secured</span>
       </div>
-      <select id="popupProfileSelect" class="person-select" aria-label="Select person to fill"></select>
+      <button id="vaultBannerBtn" class="button sm secondary" style="padding: 2px 8px; font-size: 11px;">Lock</button>
+    </div>
+
+    <!-- Domain Trust Pill -->
+    <div id="domainPill" class="domain-trust-pill hidden">
+      <span id="domainPillText">Site: Unknown</span>
+      <button id="domainTrustBtn" type="button" class="hidden">＋ Trust Domain</button>
+    </div>
+
+    <!-- Locked Screen View -->
+    <section id="lockedView" class="vault-lock-screen hidden">
+      <div class="vault-lock-icon">🔒</div>
+      <h3>Vault is Locked</h3>
+      <p>Enter your Master Password to decrypt your candidate profiles and enable autofill.</p>
+      
+      <div class="vault-error" id="unlockError"></div>
+
+      <div class="vault-input-group">
+        <input type="password" id="unlockPasswordInput" placeholder="Enter Master Password" autocomplete="current-password">
+      </div>
+      <button id="unlockBtn" class="button primary full">Unlock Vault</button>
     </section>
 
-    <section class="toggle-panel">
-      <div>
-        <strong id="statusTitle">Autofill is off</strong>
-        <p id="statusText">Turn it on when you want help with a form.</p>
-      </div>
-      <label class="switch">
-        <input id="toggle" type="checkbox" aria-label="Turn autofill on or off">
-        <span class="slider"></span>
-      </label>
-    </section>
+    <!-- Unlocked Normal View -->
+    <div id="unlockedView">
+      <section class="person-picker-card">
+        <div class="person-picker-header">
+          <span>Active Person to Fill</span>
+          <button id="addPersonQuick" class="icon-button" style="padding:0;font-size:15px;margin-left:0;" title="Add new person">＋ New</button>
+        </div>
+        <select id="popupProfileSelect" class="person-select" aria-label="Select person to fill"></select>
+      </section>
 
-    <p id="permissionNote" class="note hidden">To scan forms, allow access to the sites where you want to use autofill.</p>
+      <section class="toggle-panel">
+        <div>
+          <strong id="statusTitle">Autofill is off</strong>
+          <p id="statusText">Turn it on when you want help with a form.</p>
+        </div>
+        <label class="switch">
+          <input id="toggle" type="checkbox" aria-label="Turn autofill on or off">
+          <span class="slider"></span>
+        </label>
+      </section>
 
-    <button id="editProfile" class="button secondary full">Edit person details</button>
+      <p id="permissionNote" class="note hidden">To scan forms, allow access to the sites where you want to use autofill.</p>
 
-    <footer>Details and media stay private on this device.</footer>
+      <button id="editProfile" class="button secondary full">Edit person details</button>
+    </div>
+
+    <footer>Details and media encrypted locally on this device.</footer>
   </main>
+  <script src="security.js"></script>
   <script src="popup.js"></script>
 </body>
 </html>

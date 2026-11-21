@@ -667,6 +667,259 @@ button {
   display: inline-block;
 }
 
+/* ---------------- Security & Vault UI Styles ---------------- */
+.vault-banner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 8px 12px;
+  border-radius: 10px;
+  margin: 10px 0;
+  font-size: 12px;
+}
+
+.vault-banner.unlocked {
+  background: #eaf7ef;
+  border: 1px solid #c8e8d4;
+  color: #1b6343;
+}
+
+.vault-banner.locked {
+  background: #fdf5e6;
+  border: 1px solid #fae1b3;
+  color: #8c5d00;
+}
+
+.vault-banner.unsecured {
+  background: #fdf2f2;
+  border: 1px solid #fad2d2;
+  color: #9c2727;
+}
+
+.vault-banner-left {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 600;
+}
+
+.vault-lock-screen {
+  background: #ffffff;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 22px 18px;
+  text-align: center;
+  margin: 14px 0;
+}
+
+.vault-lock-icon {
+  font-size: 38px;
+  margin-bottom: 8px;
+}
+
+.vault-lock-screen h3 {
+  margin: 0 0 6px;
+  font-size: 16px;
+  color: #192b27;
+}
+
+.vault-lock-screen p {
+  margin: 0 0 16px;
+  font-size: 12px;
+  color: var(--muted);
+  line-height: 1.4;
+}
+
+.vault-input-group {
+  margin-bottom: 12px;
+  text-align: left;
+}
+
+.vault-input-group label {
+  display: block;
+  font-size: 12px;
+  font-weight: 600;
+  margin-bottom: 5px;
+  color: #2e433a;
+}
+
+.vault-input-group input {
+  width: 100%;
+  padding: 9px 12px;
+  border: 1px solid #cad9cf;
+  border-radius: 8px;
+  font-size: 14px;
+  outline: none;
+}
+
+.vault-input-group input:focus {
+  border-color: var(--green);
+  box-shadow: 0 0 0 3px #187c5b20;
+}
+
+.vault-error {
+  color: var(--danger);
+  background: var(--danger-bg);
+  border: 1px solid #f8c9c9;
+  border-radius: 8px;
+  padding: 8px 10px;
+  font-size: 12px;
+  margin-bottom: 12px;
+  display: none;
+}
+
+.vault-error:not(:empty) {
+  display: block;
+}
+
+.domain-trust-pill {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 6px 10px;
+  border-radius: 8px;
+  font-size: 11px;
+  margin-bottom: 10px;
+}
+
+.domain-trust-pill.trusted {
+  background: #e8f5ec;
+  border: 1px solid #c7e8cf;
+  color: #1a6b47;
+}
+
+.domain-trust-pill.untrusted {
+  background: #fdf5e7;
+  border: 1px solid #f9dfaf;
+  color: #8c5b05;
+}
+
+.domain-trust-pill button {
+  padding: 2px 7px;
+  font-size: 11px;
+  border-radius: 6px;
+  border: 1px solid #c2b083;
+  background: white;
+  color: #634306;
+}
+
+.security-card {
+  border-left: 4px solid var(--green);
+}
+
+.security-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 0;
+  border-bottom: 1px solid #edf2ee;
+  gap: 16px;
+}
+
+.security-row:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.security-row strong {
+  display: block;
+  font-size: 13px;
+  color: #1b3127;
+}
+
+.security-row p {
+  margin: 3px 0 0;
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.domain-tag-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 8px;
+}
+
+.domain-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: #ebf5ee;
+  border: 1px solid #c9e0d1;
+  color: #19583b;
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-family: monospace;
+}
+
+.domain-tag button {
+  border: none;
+  background: transparent;
+  color: #83978b;
+  font-weight: bold;
+  font-size: 14px;
+  line-height: 1;
+  padding: 0;
+}
+
+.domain-tag button:hover {
+  color: var(--danger);
+}
+
+.add-domain-row {
+  display: flex;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.add-domain-row input {
+  flex: 1;
+  padding: 7px 10px;
+  border: 1px solid #ccd8cf;
+  border-radius: 7px;
+  font-size: 13px;
+}
+
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  display: grid;
+  place-items: center;
+  z-index: 9999;
+  padding: 16px;
+}
+
+.modal-content {
+  background: white;
+  border-radius: 14px;
+  padding: 22px;
+  max-width: 440px;
+  width: 100%;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+}
+
+.modal-content h3 {
+  margin: 0 0 8px;
+  font-size: 16px;
+}
+
+.modal-content p {
+  margin: 0 0 16px;
+  font-size: 12px;
+  color: var(--muted);
+  line-height: 1.4;
+}
+
+.modal-btn-row {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 16px;
+}
+
 .bottom-actions {
   display: flex;
   align-items: center;

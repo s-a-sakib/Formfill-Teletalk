@@ -57,9 +57,12 @@ Filling out repetitive application forms for multiple candidates or jobs often l
 * The extension utilizes a `MutationObserver` and polling sequence to wait for the server's Upazila options to populate before selecting the candidate's Upazila and Post Office.
 * Features canonical district matching for alternate spellings (e.g., `Chittagong` ↔ `Chattogram`, `Comilla` ↔ `Cumilla`, `Bogra` ↔ `Bogura`, `Barisal` ↔ `Barishal`, `Jessore` ↔ `Jashore`).
 
-### 7. 🔒 Private & 100% Local
-* All data, images, signatures, and candidate details remain strictly on your local computer in Chrome's extension storage.
-* No data is ever transmitted to external servers.
+### 7. 🛡️ Bank-Grade Security Vault & Anti-Information-Jacking
+* **AES-256-GCM Master Password Encryption:** All candidate profiles, NID numbers, birth certificates, photos, and signatures are encrypted at rest using authenticated AES-GCM (256-bit) with PBKDF2 key derivation (SHA-256, 100,000 iterations, cryptographically random salt and IV). No plaintext personal data ever touches disk storage.
+* **Anti-Form-Jacking Engine:** Protects against malicious websites that employ hidden or off-screen decoy inputs (e.g. `opacity: 0`, `position: absolute; left: -9999px`, collapsed containers) designed to secretly sniff and harvest private NID or passport data. Decoy fields are strictly rejected.
+* **Domain Guard Allowlist:** Autofill only activates on verified recruitment portals (`*.teletalk.com.bd`, `alljobs.teletalk.com.bd` by default). Arbitrary untrusted websites are blocked from probing or triggering suggestions.
+* **Auto-Lock Inactivity Timer & 1-Click Lock:** Protects shared computers by automatically locking the vault after configurable idle periods (5, 15, 30, or 60 minutes) and upon browser exit.
+* **Zero External Transmission:** 100% private and offline. Data never leaves your local browser.
 
 ---
 

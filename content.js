@@ -828,39 +828,55 @@
   /* ---------------- Person Switcher & Form Scanning ---------------- */
 
   async function getFullState() {
-    const state = await chrome.storage.local.get(['autofillEnabled', 'profiles', 'activeProfileId', 'formfillProfile']);
-    let profiles = state.profiles || [];
-    let activeId = state.activeProfileId;
-    const legacy = state.formfillProfile || {};
-
-    if (!Array.isArray(profiles) || profiles.length === 0) {
-      const id = 'prof_' + Date.now();
-      const initial = { id, name: legacy.applicantName || 'Person 1', ...legacy };
-      profiles = [initial];
-      activeId = id;
-    } else if (!activeId || !profiles.some(p => p.id === activeId)) {
-      activeId = profiles[0].id;
-    }
-
-    const activeProfile = profiles.find(p => p.id === activeId) || profiles[0] || {};
-    if (activeProfile.sameAddress) {
-      for (const k of ['careOf', 'villageRoad', 'district', 'upazila', 'postOffice', 'postCode']) {
-        activeProfile[`permanent_${k}`] = activeProfile[`present_${k}`];
+    try {
+      const res = await chrome.runtime.sendMessage({
+        type: 'get-autofill-data',
+        url: window.location.href
+      });
+      if (!res || !res.enabled || res.locked || res.untrustedDomain || !res.activeProfile) {
+        return {
+          autofillEnabled: false,
+          locked: !!res?.locked,
+          untrustedDomain: !!res?.untrustedDomain,
+          profiles: [],
+          activeProfileId: null,
+          activeProfile: {},
+          antiJackingStrict: res?.antiJackingStrict ?? true
+        };
       }
+      return {
+        autofillEnabled: true,
+        locked: false,
+        untrustedDomain: false,
+        profiles: res.profilesSummary || [],
+        activeProfileId: res.activeProfileId,
+        activeProfile: res.activeProfile,
+        antiJackingStrict: res.antiJackingStrict ?? true
+      };
+    } catch (_) {
+      return {
+        autofillEnabled: false,
+        locked: false,
+        untrustedDomain: false,
+        profiles: [],
+        activeProfileId: null,
+        activeProfile: {},
+        antiJackingStrict: true
+      };
     }
-
-    return {
-      autofillEnabled: !!state.autofillEnabled,
-      profiles,
-      activeProfileId: activeId,
-      activeProfile
-    };
   }
 
-  function getMatchesForProfile(profile) {
+  function getMatchesForProfile(profile, antiJackingStrict = true) {
+    if (!profile) return [];
     const elements = [...document.querySelectorAll('input:not([type=hidden]), select, textarea')];
     const matches = [];
     for (const el of elements) {
+      // Anti-Form-Jacking Guard: block hidden, off-screen, or decoy inputs from harvesting data
+      if (antiJackingStrict && typeof SecurityGuards !== 'undefined') {
+        if (!SecurityGuards.isElementGenuinelyVisible(el)) {
+          continue;
+        }
+      }
       const key = match(el, profile);
       if (key) matches.push([el, key]);
     }
@@ -868,12 +884,9 @@
   }
 
   async function switchActivePerson(newProfileId) {
-    const { profiles } = await getFullState();
-    const chosen = profiles.find(p => p.id === newProfileId);
-    if (!chosen) return;
-    await chrome.storage.local.set({
-      activeProfileId: chosen.id,
-      formfillProfile: chosen
+    await chrome.runtime.sendMessage({
+      type: 'set-active-profile',
+      profileId: newProfileId
     });
     removeUi();
     scan();
@@ -1063,11 +1076,14 @@
   }
 
   async function scan() {
-    const { autofillEnabled, profiles, activeProfileId, activeProfile } = await getFullState();
-    if (!autofillEnabled) return;
+    const { autofillEnabled, profiles, activeProfileId, activeProfile, antiJackingStrict } = await getFullState();
+    if (!autofillEnabled || !activeProfile) {
+      removeUi();
+      return;
+    }
 
     unblockApplicableSections(activeProfile);
-    const matches = getMatchesForProfile(activeProfile);
+    const matches = getMatchesForProfile(activeProfile, antiJackingStrict);
     if (matches.length) {
       offer(matches, profiles, activeProfileId);
     }
@@ -1105,23 +1121,32 @@
     const el = e.target;
     if (!el || !['INPUT', 'SELECT', 'TEXTAREA'].includes(el.tagName)) return;
     if (el.type === 'hidden' || el.readOnly) return;
+
+    const state = await getFullState();
+    if (!state.autofillEnabled || !state.activeProfile) return;
+
+    // Anti-Jacking Protection: Reject decoy/hidden fields from prompting suggestions
+    if (state.antiJackingStrict && typeof SecurityGuards !== 'undefined') {
+      if (!SecurityGuards.isElementGenuinelyVisible(el)) {
+        hideSuggestion();
+        return;
+      }
+    }
+
     if (el.disabled) {
       el.disabled = false;
-      const { activeProfile } = await getFullState();
-      unblockApplicableSections(activeProfile);
+      unblockApplicableSections(state.activeProfile);
     }
 
     currentFocusedElement = el;
-    const { autofillEnabled, activeProfile } = await getFullState();
-    if (!autofillEnabled) return;
 
-    const key = match(el, activeProfile);
+    const key = match(el, state.activeProfile);
     if (!key) {
       hideSuggestion();
       return;
     }
 
-    const val = activeProfile[key];
+    const val = state.activeProfile[key];
     const isFile = el.type === 'file';
     if (!isFile && (val === undefined || val === '' || val === null)) {
       hideSuggestion();
@@ -1247,14 +1272,27 @@
 
   /* ---------------- Extension Event Listeners ---------------- */
 
+  chrome.runtime.onMessage.addListener(msg => {
+    if (!msg || !msg.type) return;
+    if (msg.type === 'vault-locked' || msg.type === 'vault-reset') {
+      removeUi();
+      hideSuggestion();
+    } else if (
+      msg.type === 'vault-unlocked' ||
+      msg.type === 'profiles-updated' ||
+      msg.type === 'security-settings-changed'
+    ) {
+      removeUi();
+      hideSuggestion();
+      scan();
+    }
+  });
+
   chrome.storage.onChanged.addListener((changes, area) => {
     if (area !== 'local') return;
     if (changes.autofillEnabled) {
       if (changes.autofillEnabled.newValue) scan();
       else removeUi();
-    } else if (changes.activeProfileId || changes.profiles || changes.formfillProfile) {
-      removeUi();
-      scan();
     }
   });
 
