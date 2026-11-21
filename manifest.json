@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "Formfill Teletalk",
   "version": "1.2.0",
-  "description": "Multi-person private profile assistant for filling Teletalk application forms with password-encrypted vault and anti-jacking security.",
+  "description": "Multi-person private profile assistant for filling Teletalk application forms with encrypted vault and anti-jacking security.",
   "permissions": ["storage", "alarms", "scripting", "activeTab", "unlimitedStorage"],
   "optional_host_permissions": ["<all_urls>"],
   "background": { "service_worker": "background.js" },
